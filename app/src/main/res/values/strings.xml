@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Light Diffraction</string>
+    <string-array name="types">
+        <item>Double slit</item>
+        <item>Single slit</item>
+        <item>Diffraction grating (20 slits)</item>
+    </string-array>
+    <string name="display_note">Note: Display is 50cm wide</string>
+    <string name="choose_experiment">Choose experiment:</string>
+    <string name="wavelength">Wavelength of light:</string>
+    <string name="distance">Distance from slits to screen:</string>
+    <string name="width">Width of slit:</string>
+    <string name="gap">Distance between slits:</string>
+</resources>
