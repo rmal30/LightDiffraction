@@ -1,11 +1,19 @@
 package com.rmal30.lightdiffraction;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -114,6 +122,9 @@ public class MainActivity extends AppCompatActivity{
         }
         int width = imageView.getWidth();
         int height = imageView.getHeight();
+        if(width<=0 || height<=0){
+            return;
+        }
         int center = width/2;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -248,4 +259,69 @@ public class MainActivity extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    public void share(){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        String shareSubText = "Light Diffraction - Simulate light experiments";
+        String shareBodyText = "https://play.google.com/store/apps/details?id=com.rmal30.lightdiffraction";
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubText);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareBodyText);
+        startActivity(Intent.createChooser(shareIntent, "Share With"));
+    }
+
+    public void help(){
+        String info = getString(R.string.info);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Help").setMessage(info)
+                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {public void onClick(DialogInterface dialog, int which){}})
+                .setNegativeButton(R.string.rate, new DialogInterface.OnClickListener() {public void onClick(DialogInterface dialog, int which){rate();}})
+                .setPositiveButton(R.string.share, new DialogInterface.OnClickListener() {public void onClick(DialogInterface dialog, int which){share();}})
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+    }
+
+    public void rate(){
+        try {
+            Intent rateIntent = rateIntentForUrl("market://details");
+            startActivity(rateIntent);
+        }
+        catch (Exception e) {
+            Intent rateIntent = rateIntentForUrl("https://play.google.com/store/apps/details");
+            startActivity(rateIntent);
+        }
+    }
+    private Intent rateIntentForUrl(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, getPackageName())));
+        int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+        if (Build.VERSION.SDK_INT >= 21)
+        {
+            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+        }
+        else
+        {
+            //noinspection deprecation
+            flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+        }
+        intent.addFlags(flags);
+        return intent;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.help: help(); break;
+            case R.id.rate: rate(); break;
+            case R.id.share: share(); break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

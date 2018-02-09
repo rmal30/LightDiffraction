@@ -11,4 +11,21 @@
     <string name="distance">Distance from slits to screen:</string>
     <string name="width">Width of slit:</string>
     <string name="gap">Distance between slits:</string>
+    <string name="rate">Rate</string>
+    <string name="share">Share</string>
+    <string name="info">
+        Light diffraction explores the wave nature of light by simulating slit experiments.
+        A laser light is directed towards a narrow slit or a group of slits and the interference pattern is shown on a screen.
+        \n\n
+        Simulate physics light wave interference experiments such as:\n
+            \t - Young\'s double slit experiment\n
+            \t - Young\'s single slit experiment\n
+            \t - Diffraction gratings\n
+        \n
+        Vary various parameters by using the sliders: \n
+            \t - Light wavelength \n
+            \t - Distance from slits to screen \n
+            \t - Width of slit \n
+            \t - Distance between slits \n
+    </string>
 </resources>
